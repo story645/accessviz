@@ -37,6 +37,9 @@
 %% with other math-related packages, you may want to disable it.
 \usepackage{mathptmx}                  % use matching math font
 
+%% things that need to be addressed
+\newcommand{\note}[1]{\textcolor{magenta}{#1}}
+
 %% If you are submitting a paper to a conference for review with a double
 %% blind reviewing process, please replace the value ``0'' below with your
 %% OnlineID. Otherwise, you may safely leave it at ``0''.
@@ -59,7 +62,7 @@
 
 %% Paper title.
 
-\title{Accessible Visualization Design Using Matplotlib }
+\title{Accessible Visualization Design using Matplotlib}
 
 %% This is how authors are specified in the conference style
 
@@ -147,7 +150,7 @@
 
 Matplotlib is a building block \cite{wongsuphasawatNavigatingWideWorld2021}
 Python library that developers can use to build static, animated, and interactive
-visualizations. Matplotlib out of the box supports making accessible design choices
+visualizations. Matplotlib supports making accessible design choices
 because it is designed to be general purpose while the support for static and dynamic visualizations
 complicates supporting alt text in a consistent manner.
 
@@ -161,15 +164,96 @@ such as alt-text generators or image navigators - through an API, which the Matp
 developers would welcome feedback on.
 
 
-\section{Visual Variables: Color \& Texture}
+\section{Visual Variables: Color and Texture}
 
-Customize all the things - color and texture
+Matplotlib allows users to customize aesthetics to fit many accessibility needs and
+sets accessible default colormaps, sequences, and texture patterns to aide users who do
+not have expertise in building accessible visualizations.
 
-% maybe add petroff figure here
-\cite{petroffAccessibleColorSequences2024}, colorblind safe and dark mode colormaps
-\cite{leeMpl_pe_pattern_monster011Documentation}
+\subsection{Color}
+\begin{figure}
+        \centering
+        \includegraphics[width=\linewidth, alt={visual listing of the colors in the tableau and Petroff named color sequences}]{color_sequences.png
+        }
+        \caption{Each set of circles displays the colors in the respective color sequence.
+        Accessible color sequences such as tableau and Petroff are designed such that
+        each color is perceptually distinguishable from the other colors in the sequence.}
+        \label{fig:color_cycle}
+        \centering
+  \label{fig:color_cycle}
+\end{figure}
+
+Matplotlib's color sequences (pallettes) are used by the plotting methods to automatically
+assign colors to visual elements. When plotting multiple line plots, for example, the
+first line takes the first color of the sequence, the second line takes the second color,
+the nth line the nth color, and the sequence cycles once the colors are exhausted. As
+shown in \autoref{fig:color_cycle}, Matplotlib's default color sequence is the tableau
+color sequence, which is designed to
+be accessible to people with color vision deficiencies (CVD) \cite{stoneHowWeDesigned}.
+Matplotlib also recently added the Petroff color sequences \cite{petroffAccessibleColorSequences2024}
+which are designed with the aide of machine learning to balance accessibility constraints
+with aesthetic considerations.
+
+
+\begin{figure}
+        \centering
+        \includegraphics[width=\linewidth, alt={The berlin colormap goes dark blue to reddish pink, the managua colormap goes sky blue to orange, and the
+        vanimo colormap goes bright green to bright pink. All three colormaps have a black center.}]{darkcmap.png}
+        \caption{The berling, managua, and venimo are dark-mode diverging colormaps,
+        with minimum lightness at the center, and maximum lightness at the extremes.}
+        \label{fig:color_cycle}
+        \centering
+  \label{fig:dark_color_map}
+\end{figure}
+
+All of Matplotlib's sequential and diverging colormaps are perceptually uniform and the
+default colormap `Viridis' is designed to be distinguishable for people with most forms
+of CVD \cite{enthoughtBetterDefaultColormap2015}. Additionally, the diverging dark mode
+colormaps \cite{crameriScientificColourMaps2023} in \autoref{fig:dark_color_map} were
+recently added to support dark mode displays.
+
+If these color sequences or maps do not suit the situation, Matplotlib also allows users
+to customize the color of every visual element in an image through the Artist interface.
+The colors can be specified in RGB/RGBA, HEX, grayscale, x11/CSS4, and a few library
+specific formats\cite{SpecifyingColorsMatplotlib}. The colors module supports creating custom
+linear and categorical colormaps, the normalization module provides a variety of methods
+for encoding numbers as colors, and the new colorizer module allows for even more customizability.
+
+
+\subsection{Texture}
+
+\begin{figure}
+        \centering
+        \includegraphics[width=\linewidth, alt={}]{sphx_glr_hatch_style_reference_003.png}
+        \caption{}
+        \label{fig:hatch_patterns}
+\end{figure}
+
+Matplotlib has rich support for using textures in addition to or in place of colors to
+add visual distinguishability to visual elements in a plot. Matplotlib supports almost 40
+named marker styles, markers created from Tex symbols, and custom markers created from
+paths (arbitrary shapes) \cite{MarkerReferenceMatplotlib}.
+
+
+Matplotlib provides 4 named
+line styles ('solid', 'dotted', 'dashed', 'dashdot') and a fully configurable
+
+Matplotlib offers
+10 distinct hatch patterns are supported that, as shown in \autoref{fig:hatch_patterns},
+can be combined and can be made more dense by repeating the specification,
+i.e. 'oo' yields more closely spaced circles. Additionally, Matplotlib supports generating
+custom fill patterns, as exemplified by third party libraries such as
+\cite{leeMpl_pe_pattern_monster011Documentation}.
+
+
 
 \section{Text}
+\begin{figure}
+        \centering
+        \includegraphics[width=\linewidth, alt={}]{libraqm.png}
+        \caption{}
+        \label{fig:text}
+   \end{figure}
 No really customize all the things - including text!
 %% Add libraqm figure
 
@@ -195,6 +279,25 @@ Exploit Artist model \cite{hunterMatplotlib2DGraphics2007,hunterArchitectureOpen
 %https://bokeh-a11y-audit.readthedocs.io/#c-interactive-capabilities-and-system-state-are-not-clear
 
 \section{Conclusion}
+
+
+\section{Supplemental Material Instructions}
+\label{sec:supplement_inst}
+
+In support of transparent research practices and long-term open science goals, you are encouraged to make your supplemental materials available on a publicly-accessible repository.
+Please describe the available supplemental materials in the \hyperref[sec:supplemental_materials]{Supplemental Materials} section.
+These details could include (1) what materials are available, (2) where they are hosted, and (3) any necessary omissions.
+
+\section{Figure Credits}
+\label{sec:figure_credits_inst}
+
+\autoref{fig:color_cycle} is a modification of the Matplotlib named color sequences example\cite{NamedColorSequences},
+\autoref{fig:dark_color_map}
+
+In the \hyperref[sec:figure_credits]{Figure Credits} section at the end of the paper, you should credit the original sources of any figures that were reproduced or modified.
+Include any license details necessary, as well as links to the original materials whenever possible.
+For credits to figures from academic papers, include a citation that is listed in the \textbf{References} section.
+An example is provided \hyperref[sec:figure_credits]{below}.
 
 
 %% if specified like this the section will be committed in review mode
