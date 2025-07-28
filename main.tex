@@ -203,8 +203,6 @@ to configure the on/off sequence to create arbitrary patterns. Matplotlib also s
 i.e. 'oo' yields more closely spaced circles. Additionally, Matplotlib supports generating custom fill patterns, as exemplified by third party libraries such as
 \cite{leeMpl_pe_pattern_monster011Documentation}.
 
-
-
 \section{Text}
 As with color and texture, Matplotlib's fonts allow a very high level of customization so that users can choose the fonts, styles, weights, sizes, and colors best suited for their audience\cite{FontsMatplotlibMatplotlib}. In addition, Matplotlib also has a robust API for formatting ticks \cite{MatplotlibtickerMatplotlib3103}. The default font \texttt{DejaVu sans}\cite{DejaVuFonts} provides characters that are sans serif, unembellished, and distinguishable but does not guarantee consistent stroke width or symbol spacing. There is ongoing work, aimed for version 3.11.0, to improve the font system \cite{https://github.com/orgs/matplotlib/projects/7}.
 
@@ -235,9 +233,7 @@ Exploit Artist model \cite{hunterMatplotlib2DGraphics2007,hunterArchitectureOpen
 %https://bokeh-a11y-audit.readthedocs.io/#c-interactive-capabilities-and-system-state-are-not-clear
 
 \section{Conclusion}
-
-
-
+Matplotlib provides accessible defaults and options for colors, a readable default font, and many ways to customize the graphic to make the various elements more accessible. There are architectural challenges that make it difficult to make interactive visualizations accessible, but but the artist tree stores information that could potentially be exposed to accessibility tools to compensate for the inability to introspect GUI elements.
 
 \section{Figure Credits}
 \label{sec:figure_credits_inst}
@@ -248,9 +244,7 @@ Exploit Artist model \cite{hunterMatplotlib2DGraphics2007,hunterArchitectureOpen
 
 %% if specified like this the section will be committed in review mode
 \acknowledgments{
-The authors wish to thank the numerous people who have contributed this work to Matplotlib. Hannah is thankful for the guidance the Bokeh accessibility audit\cite{elavskyBokehAccessibilityAudit} provided on how visualization libraries can help users build accessible visualizations. The font and alt text in metadata work is supported in part by a NumFocus Small Development Grant.
-
-}
+The authors wish to thank the numerous people who have contributed this work to Matplotlib. Hannah is thankful for the guidance the Bokeh accessibility audit\cite{elavskyBokehAccessibilityAudit} provided on how visualization libraries can help users build accessible visualizations. The font and alt text in metadata work is supported in part by a NumFocus Small Development Grant.}
 
 %\bibliographystyle{abbrv}
 %\bibliographystyle{abbrv-doi}
