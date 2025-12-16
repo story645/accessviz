@@ -228,9 +228,13 @@ build whatever interactions they want/multiple ways of accessing the data (\cite
 
 \subsection{API for accesibility tools}
 Exploit Artist model \cite{hunterMatplotlib2DGraphics2007,hunterArchitectureOpenSource}
-%cite{data prototype} provides system state https://bokeh-a11y-audit.readthedocs.io/#c-interactive-capabilities-and-system-state-are-not-clear
+%cite{data prototype} provides system stat(e https://bokeh-a11y-audit.readthedocs.io/#c-interactive-capabilities-and-system-state-are-not-clear) and consistent interface for accessibility tools to query for information about the state of the visualization
+
+An archiecture that is explicit about how visual elements correspond to distinct data elements, which is a necessary condition of a visualization being readable\cite{ziemkiewiczEmbeddingInformationVisualization2009}, could compensate for a major accessibility limitation of the current Matplotlib architecture, which is that the interactive widgets and GUIs are rendered as PNGs (so that Matplotlib does not have to maintain a GUI library) which means that screen readers cannot query the individual elements. One of the ways Matplotlib facilitates accessibility is by allowing the user to customize most of the aesthetics - colors, fonts, textures. Standardizing the internal parameters provides for a consistent interface for external accessibility tools, such as libraries of accessible stylesheets or tools that may want to query the Matplotlib Artist for context of the current state. The factorization of the artist into the encoding and composition stages provides a framework for testing each independently. For example, encoders build in this framework would be designed to ensure that a transformation from a non colorblind safe colormap into a colorblind safe colormap would ensure that the colormaps are equivalent such that the transformation is not introducing a change in structure. Similarly, the composition stage can be tested to ensure that parameters are applied consistently across visual elements and, as with encoding, more accessible elements can be swapped in without introducing new structure.
 
 %https://bokeh-a11y-audit.readthedocs.io/#c-interactive-capabilities-and-system-state-are-not-clear
+
+
 
 \section{Conclusion}
 Matplotlib provides accessible defaults and options for colors, a readable default font, and many ways to customize the graphic to make the various elements more accessible. There are architectural challenges that make it difficult to make interactive visualizations accessible, but but the artist tree stores information that could potentially be exposed to accessibility tools to compensate for the inability to introspect GUI elements.
@@ -244,7 +248,7 @@ Matplotlib provides accessible defaults and options for colors, a readable defau
 
 %% if specified like this the section will be committed in review mode
 \acknowledgments{
-The authors wish to thank the numerous people who have contributed this work to Matplotlib. Hannah is thankful for the guidance the Bokeh accessibility audit\cite{elavskyBokehAccessibilityAudit} provided on how visualization libraries can help users build accessible visualizations. The font and alt text in metadata work is supported in part by a NumFocus Small Development Grant.}
+The authors wish to thank the numerous people who have contributed this work to Matplotlib. Hannah is thankful for the guidance the Bokeh accessibility audit\cite{elavskyBokehAccessibilityAudit} provided on how visualization libraries can help users build accessible visualizations. The font and alt text in metadata work is supported in part by a NumFocus Small Development Grant. The developement of architecture that could better facilitate accessiblity is supported in part by a NASA ROSES grant.}
 
 %\bibliographystyle{abbrv}
 %\bibliographystyle{abbrv-doi}
