@@ -62,7 +62,7 @@
 
 %% Paper title.
 
-\title{Accessible Visualization Design using Matplotlib}
+\title{How ODD is Matplotlib?}
 
 %% This is how authors are specified in the conference style
 
@@ -92,27 +92,7 @@
 
 %% Abstract section.
 \abstract{
-    Visualization libraries attempt to provide the tools to make accessible
-    visualzations. What does that mean?
-
-    Key points:
-
-    color/texture
-    Components can build accessible visualizations.
-    colorblind safe colormaps and color sequences,
-    customizable dash and hatch patterns,
-    customizable markers
-    text:
-    customizable fonts
-    internationalization (libraqm)
-
-    alt-text is complicated
-    multiple backends, interactive backends are
-
-    where architecture can help:
-    Matplotlib's artist model means there's a core object to query for information
-    to build automatic description. question is what info is needed
-
+        Visiualization library archictecture determines the technical limits of how accessible a library can be. The modular design of the Matplotlib library allows it to effectively take an option driven design approach, providing both accessible defaults and a high degree of customization. Visual information is encapsulated in the artist objects but Matplotlib developers do not have the accessibility expertise to gauge how to effectively expose this information to downstream tools or rendering backends.
 } % end of abstract
 
 %% Keywords that describe your work. Will show as 'Index Terms' in journal
@@ -139,28 +119,25 @@
 
 %% \section{Introduction} %for journal use above \firstsection{..} instead
 
-Matplotlib is a building block \cite{wongsuphasawatNavigatingWideWorld2021}
-Python library that developers can use to build static, animated, and interactive
-visualizations. Matplotlib supports making accessible design choices
-because it is designed to be general purpose while the support for static and dynamic visualizations complicates supporting alt text in a consistent manner. Every visual element in an image produced by Matplotlib -  every line, text, image - is backed by an object called an Artist \cite{hunterArchitectureOpenSource}. Each artist knows the properties of the element it is abstracting and if it is the child of another artist, such as if it is a line inside a figure. This information could be exposed to accessibility tools, such as alt-text generators or image navigators - through an API and the Matplotlib developers would welcome feedback on what information would be useful to expose.
 
+The accessibility of visualizations and visualization tools is highly determined by the tools they are built with and it is the architecture of these upstream tools that determines what accessibility is feasible to implement. Matplotlib is a building block \cite{wongsuphasawatNavigatingWideWorld2021}
+Python library that developers can use to build static, animated, and interactive visualizations. Matplotlib's API aims to facilitate option driven design \cite{elavskyOptionDrivenDesignContext2023} by providing defaults that are accessible under many criteria and options for almost every visual element it generates. This customizability is possible because of modular Matplotlib's architecture; every visual element in an image produced by Matplotlib -  every line, text, image - is backed by an object called an Artist \cite{hunterArchitectureOpenSource}. Generally, the encoding/(aesthetic) information is passed into the artist, rather than part of its implementation, which is why Artists can be customized to be accessible. Each artist knows the properties of the element it is abstracting and if it is the child of another artist, such as if it is a line inside a figure. This information could be exposed to accessibility tools, such as alt-text generators or image navigators, through an API and the Matplotlib developers invite feedback on what information would be useful to expose.
 
 
 \section{Visual Variables: Color and Texture}
 
-Matplotlib allows users to customize aesthetics to fit many accessibility needs and
-sets accessible default colormaps, sequences, and texture patterns to aide users who do not have expertise in building accessible visualizations.
+Matplotlib allows users to customize aesthetics to fit many accessibility needs and sets accessible default colormaps, sequences, and texture patterns to aide users who do not have expertise in building accessible visualizations. Matplotlib also provides a method for creating reusable stylesheets \cite{CustomizingMatplotlibStyle}, which allow the users to set default values for many of the aesthetic parameters of specific artists, e.g. "lines.linewidth : 3" and "xtick.labelsize : 16". These stylesheets are composable; for example, users can compose a stylesheet setting accessible colors with a stylesheet that adjusts text sizes and line widths for posters. 
+
 \subsection{Color}
 \begin{figure}
         \centering
-        \includegraphics[width=\linewidth, alt={visual listing of the colors in the tableau and Petroff named color sequences}]{color_sequences.png
+        \includegraphics[width=\linewidth, alt={Visual listing of the colors in the Okabe Ito, Petroff 6, 8, and 10, and Tableau 10, 20, 20b, and 20c named color sequences}]{color_sequences.png
         }
-        \caption{Each set of circles displays the colors in the respective color sequence. Accessible color sequences such as tableau and Petroff are designed such that each color is perceptually distinguishable from the other colors in the sequence.}
+        \caption{Matplotlib provides the Okabe-Ito, four Tableau, and three Petroff accessible color sequences. Each sequence is designed so that each color is perceptually distinguishable from the other colors in the sequence.}
         \label{fig:color_cycle}
 \end{figure}
 
-Matplotlib's color sequences (palettes) are used by the plotting methods to automatically assign colors to visual elements. When plotting multiple line plots, for example, the first line takes the first color of the sequence, the second line takes the second color, the nth line the nth color, and the sequence cycles once the colors are exhausted. As shown in \autoref{fig:color_cycle}, Matplotlib's default color sequence is the tableau color sequence, which is designed to be accessible to people with color vision deficiencies (CVD) \cite{stoneHowWeDesigned}. The Petroff color sequences \cite{petroffAccessibleColorSequences2024} were added in versions 3.10.0 and 3.11.0 and are designed with the aide of machine learning to balance accessibility constraints with aesthetic considerations.
-
+Matplotlib's color sequences (palettes) are used by the plotting methods to automatically assign colors to visual elements. When plotting multiple line plots, for example, the first line takes the first color of the sequence, the second line takes the second color, the nth line the nth color, and the sequence cycles once the colors are exhausted. As shown in \autoref{fig:color_cycle}, Matplotlib's default color sequence is the tableau color sequence, which is designed to be accessible to people with color vision deficiencies (CVD) \cite{stoneHowWeDesigned}. The Petroff color sequences \cite{petroffAccessibleColorSequences2024} were added in versions 3.10.0 and 3.11.0 and are designed with the aide of machine learning to balance accessibility constraints with aesthetic considerations. The Okabe-Ito sequence was added in 3.11.0 and aims to have reliable contrast on light and dark backgrounds and when converted to CYMK for printing\cite{ichiharaColorUniversalDesignThe2008}. 
 
 \begin{figure}
         \centering
@@ -171,10 +148,7 @@ Matplotlib's color sequences (palettes) are used by the plotting methods to auto
         \label{fig:dark_color_map}
 \end{figure}
 
-All of Matplotlib's sequential and diverging colormaps are perceptually uniform and the default colormap `Viridis' is designed to be distinguishable for people with most forms of CVD \cite{enthoughtBetterDefaultColormap2015}. Additionally, the diverging dark mode colormaps \cite{crameriScientificColourMaps2023} in \autoref{fig:dark_color_map} were added in version 3.10.0 to support dark mode displays.
-
-If these color sequences or maps do not suit the situation, Matplotlib also allows users to customize the color of every visual element in an image through the Artist interface. The colors can be specified in RGB/RGBA, HEX, grayscale, x11/CSS4, and a few library specific formats\cite{SpecifyingColorsMatplotlib}. The colors module supports creating custom linear and categorical colormaps, the normalization module provides a variety of methods for encoding numbers as colors, and the new colorizer module allows for even more customizability.
-
+All of Matplotlib's sequential and diverging colormaps are perceptually uniform and the default colormap `Viridis' is designed to be distinguishable for people with most forms of CVD \cite{enthoughtBetterDefaultColormap2015}. Additionally, the diverging dark mode colormaps \cite{crameriScientificColourMaps2023} in \autoref{fig:dark_color_map} were added in version 3.10.0 to support dark mode displays. If these color sequences or maps do not suit the situation, Matplotlib also allows users to customize the color of every visual element in an image through the Artist interface. The colors can be specified in RGB/RGBA, HEX, grayscale, x11/CSS4, and a few library specific formats\cite{SpecifyingColorsMatplotlib}. The colors module supports creating custom linear and categorical colormaps, the normalization module provides a variety of methods for encoding numbers as colors, the new colorizer module allows for even more customizability. Users can also create custom colormaps and norms and register external libraries of colormaps.
 
 \subsection{Texture}
 
@@ -195,8 +169,7 @@ i.e. 'oo' yields more closely spaced circles. Additionally, Matplotlib supports 
 \cite{leeMpl_pe_pattern_monster011Documentation}.
 
 \section{Text}
-As with color and texture, Matplotlib's fonts allow a very high level of customization so that users can choose the fonts, styles, weights, sizes, and colors best suited for their audience\cite{FontsMatplotlibMatplotlib}. In addition, Matplotlib also has a robust API for formatting ticks \cite{MatplotlibtickerMatplotlib3103}. The default font \texttt{DejaVu sans}\cite{DejaVuFonts} provides characters that are sans serif, unembellished, and distinguishable but does not guarantee consistent stroke width or symbol spacing. There is ongoing work, aimed for version 3.11.0, to improve the font system \cite{https://github.com/orgs/matplotlib/projects/7}.
-
+As with color and texture, Matplotlib's fonts allow a very high level of customization so that users can choose the fonts, styles, weights, sizes, and colors best suited for their audience\cite{FontsMatplotlibMatplotlib}. In addition, Matplotlib also has a robust API for formatting ticks \cite{MatplotlibtickerMatplotlib3103}. The default font \texttt{DejaVu sans}\cite{DejaVuFonts} provides characters that are sans serif, unembellished, and distinguishable but does not guarantee consistent stroke width or symbol spacing. 
 \begin{figure}[!h]
         \centering
         \includegraphics[width=\linewidth, alt={}]{libraqm.png}
@@ -204,37 +177,47 @@ As with color and texture, Matplotlib's fonts allow a very high level of customi
         \label{fig:libraqm}
 \end{figure}
 
-One major goal of the 3.11 font work is to better support non-Latin alphabets because graphs can be more easily created and understood when they incorporate conventions from the user's socio-cultural experiences \cite{byrneAcquiredCodesMeaning2016}. This support is being added through the adoption of \texttt{libraqm} \cite{HOSTOmanLibraqm2025} as the text engine. As shown in \autoref{fig:libraqm}, \texttt{libraqm} supports right-to-left and left-to-right texts, and  parsing and placing letters, vowels, diacritics, and variant character forms correctly\cite{WhatHarfBuzzHarfBuzz,WhyNeedShaping}; therefore migrating to \texttt{libraqm} will allow Matplotlib to more easily support most of the writing systems covered by the Unicode standard.
+Version 3.11 improves support for non-Latin alphabets; this can improve accessibility because graphs can be more easily created and understood when they incorporate conventions from the user's socio-cultural experiences \cite{byrneAcquiredCodesMeaning2016}. This support is being added through the adoption of \texttt{libraqm} \cite{HOSTOmanLibraqm2025} as the text engine. As shown in \autoref{fig:libraqm}, \texttt{libraqm} supports right-to-left and left-to-right texts, and  parsing and placing letters, vowels, diacritics, and variant character forms correctly\cite{WhatHarfBuzzHarfBuzz,WhyNeedShaping}; therefore migrating to \texttt{libraqm} allows Matplotlib to more easily support most of the writing systems covered by the Unicode standard.
 
 \section{Alt text \& Aria}
-%https://bokeh-a11y-audit.readthedocs.io/#help-developers-succeed -
-defaults/guardrails/validating alt text
+
+
+Matplotlib's goal of being backend independent drove an architecture decision to separate the artists from the backends\cite{BackendsMatplotlib3110}, which are (very loosely) the software that displays the visual element specified by the artist. Broadly, backends include static rendering engines such as Agg, Cairo, and PDF and interactive GUI frameworks such as QTAgg, GTKCairo, and ipympl. This separation of concerns at the architecture layer makes it technically feasible to develop accessibility API drawing from the Artist and customized to each backend, but the lack of consistent standards for wgar information should be passed along, and how, makes it unclear what that API should be. 
 
 \subsection{Static Backends}
-Standards what standards?
+
+Matplotlib can write arbitrary metadata, including EXIF tags to the static image files, (e.g. png, jpeg, pdf, gif) it can output, which developers can use to build downstream tools targeted to specific backends, such as MatplotAlt\cite{nylundMatplotAltPythonLibrary2025} for computational notebooks. Matplotlib could encourage this adaptor like approach, similar to Olli\cite{blancoOlliExtensibleVisualization}, but it raises questions on which defaults and guardrails, as described in the Bokeh Accessibility Audit \cite{elavskyBokehAccessibilityAudit}, Matplotlib should implement internally vs delegate to downstream libraries implemented by developers who have expertise in accessibility. For example, some formats (e.g. vector) have the ability to attach information to individual parts of a figure, whereas raster formats can only attach such alt text to the figure as a whole. Matplotlib can attach this information at the figure level and the artist level, but would it be more useful for Matplotlib to pass the tree to downstream tools or combine the information depending on backend? Should Matplotlib auto populate fields using artist information or raise a warning that users did not add alt text or neither? It is these trade offs between defaults and flexibility that Matplotlib developers would appreciate guidance. 
+
 \subsection{Interactive Backends}
+
+Most of the Matplotlib interactive backends 
 Rendered as PNG - infeasible to implement GUI library in mpl, positive is folks can
 build whatever interactions they want/multiple ways of accessing the data (\cite{BokehAccessibilityAudit})
+
+could be implemented to address this, or a semantic layering system where screen reader content could be placed in a layer\cite{WebAIMCSSAction}.
 
 
 \subsection{API for accesibility tools}
 Exploit Artist model \cite{hunterMatplotlib2DGraphics2007,hunterArchitectureOpenSource}
-%cite{data prototype} provides system stat(e https://bokeh-a11y-audit.readthedocs.io/#c-interactive-capabilities-and-system-state-are-not-clear) and consistent interface for accessibility tools to query for information about the state of the visualization
+%cite{data prototype} provides system state(e https://bokeh-a11y-audit.readthedocs.io/#c-interactive-capabilities-and-system-state-are-not-clear) and consistent interface for accessibility tools to query for information about the state of the visualization
 
-An archiecture that is explicit about how visual elements correspond to distinct data elements, which is a necessary condition of a visualization being readable\cite{ziemkiewiczEmbeddingInformationVisualization2009}, could compensate for a major accessibility limitation of the current Matplotlib architecture, which is that the interactive widgets and GUIs are rendered as PNGs (so that Matplotlib does not have to maintain a GUI library) which means that screen readers cannot query the individual elements. One of the ways Matplotlib facilitates accessibility is by allowing the user to customize most of the aesthetics - colors, fonts, textures. Standardizing the internal parameters provides for a consistent interface for external accessibility tools, such as libraries of accessible stylesheets or tools that may want to query the Matplotlib Artist for context of the current state. The factorization of the artist into the encoding and composition stages provides a framework for testing each independently. For example, encoders build in this framework would be designed to ensure that a transformation from a non colorblind safe colormap into a colorblind safe colormap would ensure that the colormaps are equivalent such that the transformation is not introducing a change in structure. Similarly, the composition stage can be tested to ensure that parameters are applied consistently across visual elements and, as with encoding, more accessible elements can be swapped in without introducing new structure.
+An architecture that is explicit about how visual elements correspond to distinct data elements, could compensate for a major accessibility limitation of the current Matplotlib architecture, which is that the interactive widgets and GUIs are rendered as PNGs (so that Matplotlib does not have to maintain a GUI library) which means that screen readers cannot query the individual elements. 
+
+One of the ways Matplotlib facilitates accessibility is by allowing the user to customize most of the aesthetics - colors, fonts, textures. Standardizing the internal parameters provides for a consistent interface for external accessibility tools, such as libraries of accessible stylesheets or tools that may want to query the Matplotlib Artist for context of the current state. The factorization of the artist into the encoding and composition stages provides a framework for testing each independently. For example, encoders build in this framework would be designed to ensure that a transformation from a non colorblind safe colormap into a colorblind safe colormap would ensure that the colormaps are equivalent such that the transformation is not introducing a change in structure. Similarly, the composition stage can be tested to ensure that parameters are applied consistently across visual elements and, as with encoding, more accessible elements can be swapped in without introducing new structure.
 
 %https://bokeh-a11y-audit.readthedocs.io/#c-interactive-capabilities-and-system-state-are-not-clear
 
 
 
 \section{Conclusion}
-Matplotlib provides accessible defaults and options for colors, a readable default font, and many ways to customize the graphic to make the various elements more accessible. There are architectural challenges that make it difficult to make interactive visualizations accessible, but but the artist tree stores information that could potentially be exposed to accessibility tools to compensate for the inability to introspect GUI elements.
+Matplotlib's option driven design provides accessible defaults and many ways to customize the graphic to make the various elements more accessible. There are architectural challenges that make it difficult to make interactive visualizations accessible, but the artist tree stores information that could potentially be exposed to accessibility tools to compensate for the inability to introspect GUI elements. It is unclear how much of this information would be useful to expose, nor in what manner, and input from the accessibility researcher community would be very welcome. 
+
 
 \section{Figure Credits}
 \label{sec:figure_credits_inst}
 
 \autoref{fig:color_cycle} is a modification of the Matplotlib named color sequences example\cite{NamedColorSequences},
-\autoref{fig:dark_color_map} is a modification of the example in the 3.10 release notes \cite{WhatsNewMatplotlib}, \autoref{fig:hatch_patterns} is one of the examples in the Matplotlib hatch reference examples \cite{HatchStyleReference}.
+\autoref{fig:dark_color_map} is a modification of the example in the 3.10 release notes \cite{WhatsNewMatplotlib}, \autoref{fig:hatch_patterns} is one of the examples in the Matplotlib hatch reference example \cite{HatchStyleReference}.
 
 
 %% if specified like this the section will be committed in review mode
