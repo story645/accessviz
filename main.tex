@@ -62,7 +62,7 @@
 
 %% Paper title.
 
-\title{How ODD is Matplotlib?}
+\title{The ODDness of Matplotlib?}
 
 %% This is how authors are specified in the conference style
 
@@ -181,20 +181,15 @@ Version 3.11 improves support for non-Latin alphabets; this can improve accessib
 
 \section{Alt text \& Aria}
 
-
 Matplotlib's goal of being backend independent drove an architecture decision to separate the artists from the backends\cite{BackendsMatplotlib3110}, which are (very loosely) the software that displays the visual element specified by the artist. Broadly, backends include static rendering engines such as Agg, Cairo, and PDF and interactive GUI frameworks such as QTAgg, GTKCairo, and ipympl. This separation of concerns at the architecture layer makes it technically feasible to develop accessibility API drawing from the Artist and customized to each backend, but the lack of consistent standards for wgar information should be passed along, and how, makes it unclear what that API should be. 
 
 \subsection{Static Backends}
 
-Matplotlib can write arbitrary metadata, including EXIF tags to the static image files, (e.g. png, jpeg, pdf, gif) it can output, which developers can use to build downstream tools targeted to specific backends, such as MatplotAlt\cite{nylundMatplotAltPythonLibrary2025} for computational notebooks. Matplotlib could encourage this adaptor like approach, similar to Olli\cite{blancoOlliExtensibleVisualization}, but it raises questions on which defaults and guardrails, as described in the Bokeh Accessibility Audit \cite{elavskyBokehAccessibilityAudit}, Matplotlib should implement internally vs delegate to downstream libraries implemented by developers who have expertise in accessibility. For example, some formats (e.g. vector) have the ability to attach information to individual parts of a figure, whereas raster formats can only attach such alt text to the figure as a whole. Matplotlib can attach this information at the figure level and the artist level, but would it be more useful for Matplotlib to pass the tree to downstream tools or combine the information depending on backend? Should Matplotlib auto populate fields using artist information or raise a warning that users did not add alt text or neither? It is these trade offs between defaults and flexibility that Matplotlib developers would appreciate guidance. 
+Matplotlib can write arbitrary metadata, including EXIF tags to the static image files, (e.g. png, jpeg, pdf, gif) it can output, which developers can use to build downstream tools targeted to specific backends, such as MatplotAlt\cite{nylundMatplotAltPythonLibrary2025} for computational notebooks, or custom accessibility aware backend layers such as py-maidr\cite{PymaidrAccessibleData}. Matplotlib could encourage this adaptor like approach, similar to Olli\cite{blancoOlliExtensibleVisualization}, but it raises questions on which defaults and guardrails, as described in the Bokeh Accessibility Audit \cite{elavskyBokehAccessibilityAudit}, Matplotlib should implement internally vs delegate to downstream libraries implemented by developers who have expertise in accessibility. For example, some formats (e.g. vector) have the ability to attach information to individual parts of a figure, whereas raster formats can only attach such alt text to the figure as a whole. Matplotlib can attach this information at the figure level and the artist level, but would it be more useful for Matplotlib to pass the tree to downstream tools or combine the information depending on backend? Should Matplotlib auto populate fields using artist information or raise a warning that users did not add alt text or neither? It is these trade offs between defaults and flexibility that Matplotlib developers would appreciate guidance. 
 
 \subsection{Interactive Backends}
+Matplotlib's backend independent widget system is implemented by rendering most of the Matplotlib interactive backends as static PNGs with an event system layer on top. This means that a lot of accessibility tools, such as key bindings, are implemented in the respective GUI framework rather than Matplotlib, and that screen readers cannot query the individual elements. The advantage of this approach is that developers are not limited to the widgets provided by a specific framework and instead can build basically any interaction that the event system\cite{InteractiveFiguresAsynchronous} supports, which itself is another form of supporting full customization to create interfaces tailored to a specific audiences access needs. The limited accessibility could potentially be addressed through the implementation of a layering content to manage information about the visual elements. For example, a layering approach could be used to group semantic content, as implemented in the \cite{plotnine} library built on top of Matplotlib, and one of these layers could be specifically targeted to screen readers, as recommended by WebAIM\cite{WebAIMCSSAction}. This is somewhat technically feasible in the current Matplotlib architecture because the artists store information about themselves and are somewhat loosly coupled with each other such that the information is 
 
-Most of the Matplotlib interactive backends 
-Rendered as PNG - infeasible to implement GUI library in mpl, positive is folks can
-build whatever interactions they want/multiple ways of accessing the data (\cite{BokehAccessibilityAudit})
-
-could be implemented to address this, or a semantic layering system where screen reader content could be placed in a layer\cite{WebAIMCSSAction}.
 
 
 \subsection{API for accesibility tools}
