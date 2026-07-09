@@ -78,7 +78,7 @@
 
 \author{Hannah Aizenman \thanks{email:haizenman@gradcenter.cuny.edu}\\%
         \scriptsize Computer Science, The Graduate Center, CUNY % 
-\and Elliot Sales de Andrade  \thanks{e-mail: elliot quantum.analyst@gmail.com }\\%
+\and Elliott Sales de Andrade \thanks{e-mail: quantum.analyst@gmail.com}\\%
         \scriptsize Matplotlib %
 \and Kyle Sunden \thanks{e-mail: contact@ksunden.space}\\%
         \scriptsize Matplotlib %
@@ -93,12 +93,12 @@
 
 %% Abstract section.
 \abstract{Matplotlib was designed with the option driven design (ODD) goal of 
-providing a high degree of customization and defaults that are appropriate for many different use cases. To achieve a balance of configurability and maintainability, Matplotlib has a modular architecture where visual information is encapsulated in the artist objects and output is managed by independent backends. This architecture makes it feasible to implement more accessibile options in the library and expose more information about the visualization to downstream accessibility tools, but the Matplotlib maintainers lack the expertise in accessibility to gauge what would be useful to implement internally and what information would be useful to expose through a public API. 
+providing a high degree of customization and defaults that are appropriate for many different use cases. To achieve a balance of configurability and maintainability, Matplotlib has a modular architecture where visual information is encapsulated in the artist objects and output is managed by independent backends. This architecture makes it feasible to implement more accessible options in the library and expose more information about the visualization to downstream accessibility tools, but the Matplotlib maintainers lack the expertise in accessibility to gauge what would be useful to implement internally and what information would be useful to expose through a public API.
 } % end of abstract
 
 %% Keywords that describe your work. Will show as 'Index Terms' in journal
 %% please capitalize first letter and insert punctuation after last keyword.
-\keywords{accessiblity, visualization library design, internationalization}
+\keywords{accessibility, visualization library design, internationalization}
 
 %% Copyright space is enabled by default as required by guidelines.
 %% It is disabled by the 'review' option or via the following command:
@@ -125,7 +125,7 @@ providing a high degree of customization and defaults that are appropriate for m
 Matplotlib is a building block~\cite{wongsuphasawatNavigatingWideWorld2021}
 Python library that developers can use to build static, animated, and interactive visualizations. Matplotlib's motto is "make simple things easy and difficult things possible", which is essentially option driven design (ODD), which is a practice of building systems that users can configure to their needs~\cite{elavskyOptionDrivenDesignContext2023}. Matplotlib tries to achieve this goal by providing options for almost every visual element it generates. Since not every user needs or wants this level of personalization, Matplotlib also provides defaults that users can hopefully use in many situations. This customizability is possible because of modular Matplotlib's architecture; every visual element (e.g. line, text, image) in a visualization produced by Matplotlib is backed by an object called an Artist ~\cite{hunterArchitectureOpenSource}. Generally, the encoding/(aesthetic) information is passed into the artist, rather than part of its implementation, which is why Artists can be customized to be accessible. Each artist knows the properties of the element it is abstracting and if it is the child of another artist, such as if it is a line inside a figure. This information could be exposed to accessibility tools, such as alt-text generators or image navigators, and the Matplotlib maintainers invite feedback on what information would be useful to expose through a public API.
 
-In this paper, we document the options in Matplotlib that enable building accessible visualizations, the ongoing work of adding more accessible options, the limitations of the current implementation, and how Matplotlib's option driven design enables potentially building interfaces, libraries and tools to improve accessibility,
+In this paper, we document the options in Matplotlib that enable building accessible visualizations, the ongoing work of adding more accessible options, the limitations of the current implementation, and how Matplotlib's option driven design enables potentially building interfaces, libraries and tools to improve accessibility.
 
 \section{Visual Variables: Color, Texture, and Shape}
 
@@ -166,7 +166,7 @@ Matplotlib offers many  perceptually uniform sequential and diverging colormaps 
         row 3 col 1: square filled with circular 'O' hatch;
         col 2: smaller and denser circular pattern produced by scaled hatch 'OO';
         col 3: 'O' and '.' patterns composed to produce a pattern of open circle with a dense middle circle nested within.}]{patterns.pdf}
-        \caption{This is a small subset of the options matplotlib provides for customizing markers, lines, and hatches.}
+        \caption{This is a small subset of the options Matplotlib provides for customizing markers, lines, and hatches.}
         \label{fig:hatch_patterns}
 \end{figure}
 
@@ -183,7 +183,7 @@ paths (arbitrary shapes)~\cite{MarkerReferenceMatplotlib}.
 As shown in \autoref{fig:hatch_patterns}, markers, lines, and hatches can all be customized using color. Path effects~\cite{PathEffectsGuide} can be used to adjust the style of how lines, texts, and patches (shapes) are drawn. This can include adding effects such as shadows, outlines, strokes with a "hand drawn" aesthetic, and barbs as in \autoref{fig:hatch_patterns}. Additionally, Matplotlib supports generating custom fill patterns, as exemplified by third party libraries such as \cite{leeMpl_pe_pattern_monster011Documentation}. 
 
 \section{Text}
-As with color and texture, Matplotlib's fonts allow a very high level of customization so that users can choose the fonts, styles, weights, sizes, and colors best suited for their audience~\cite{FontsMatplotlibMatplotlib}. The default font \texttt{DejaVu sans}~\cite{DejaVuFonts} provides characters that are sans serif, unembellished, and distinguishable but does not guarantee consistent stroke width or symbol spacing. 
+As with color and texture, Matplotlib's fonts allow a very high level of customization so that users can choose the fonts, styles, weights, sizes, and colors best suited for their audience~\cite{FontsMatplotlibMatplotlib}. The default font \texttt{DejaVu Sans}~\cite{DejaVuFonts} provides characters that are sans serif, unembellished, and distinguishable but does not guarantee consistent stroke width or symbol spacing. 
 \begin{figure}[!h]
         \centering
         \includegraphics[width=\linewidth, alt={Illustration of the text features enabled by the new text stack: The mixed-language text 'Here is some رَقْم in اَلْعَرَبِيَّةُ'. A rightwards arrow pointing from the individual letters 'f', 'f', and 'i', to the 'ffi' ligature. An "equation" showing the letter 'a' plus a circumflex accent plus a tilde
@@ -194,7 +194,7 @@ As with color and texture, Matplotlib's fonts allow a very high level of customi
         \label{fig:libraqm}
 \end{figure}
 
-Version 3.11 improves support for non-Latin alphabets; this can improve accessibility because graphs can be more easily created and understood when they incorporate conventions from the user's socio-cultural experiences~\cite{byrneAcquiredCodesMeaning2016}. This support is being added by extending text processing and rendering to use the \texttt{libraqm}~\cite{libraqm} and \texttt{HardBuzz}~\cite{WhatHarfBuzzHarfBuzz} libraries to handle complex text layout and rendering. As shown in \autoref{fig:libraqm}, this new text handling pipeline supports right-to-left and left-to-right texts, and parsing and placing letters, vowels, diacritics, ligatures, and variant character forms correctly~\cite{WhatHarfBuzzHarfBuzz,WhyNeedShaping}; therefore migrating to this new text processing and rendering stack allows Matplotlib to more easily support most of the writing systems covered by the Unicode standard.
+Version 3.11 improves support for non-Latin alphabets; this can improve accessibility because graphs can be more easily created and understood when they incorporate conventions from the user's socio-cultural experiences~\cite{byrneAcquiredCodesMeaning2016}. This support is being added by extending text processing and rendering to use the \texttt{libraqm}~\cite{libraqm} and \texttt{HarfBuzz}~\cite{WhatHarfBuzzHarfBuzz} libraries to handle complex text layout and rendering. As shown in \autoref{fig:libraqm}, this new text handling pipeline supports right-to-left and left-to-right texts, and parsing and placing letters, vowels, diacritics, ligatures, and variant character forms correctly~\cite{WhatHarfBuzzHarfBuzz,WhyNeedShaping}; therefore migrating to this new text processing and rendering stack allows Matplotlib to more easily support most of the writing systems covered by the Unicode standard.
 
 In addition, Matplotlib also has a robust API for formatting ticks~\cite{MatplotlibtickerMatplotlib3103}. This means ticks can be styled with accessibility in mind - readable fonts, high contrast colors, font sizes and weights appropriate to the context. Additionally, users can incorporate local conventions, such as how numbers are formatted. 
 
@@ -235,7 +235,7 @@ Matplotlib's option driven design provides accessible defaults and many ways to 
 
 %% if specified like this the section will be committed in review mode
 \acknowledgments{
-The authors wish to thank Tim Hoffmann, Scott Shambaugh, Ricci Adams, Ruth Comer, and Thomas Caswell for their input on this paper and the numerous people who have contributed this work to Matplotlib. Addtionally Hannah would like to thank Mikael Vejdemo-Johansson for helping with the link to theory. The font work and data prototype work is supported in part by a NASA ROSES grant and the font and alt text in metadata work is supported in part by a NumFocus Small Development Grant.}
+The authors wish to thank Tim Hoffmann, Scott Shambaugh, Ricci Adams, Ruth Comer, and Thomas Caswell for their input on this paper and the numerous people who have contributed this work to Matplotlib. Additionally Hannah would like to thank Mikael Vejdemo-Johansson for helping with the link to theory. The font work and data prototype work is supported in part by a NASA ROSES grant and the font and alt text in metadata work is supported in part by a NumFOCUS Small Development Grant.}
 
 %\bibliographystyle{abbrv}
 \bibliographystyle{abbrv-doi}
