@@ -76,7 +76,7 @@
 
 %% Author and Affiliation (multiple authors with multiple affiliations)
 
-\author{Hannah Aizenman \thanks{email:haizenman@gradcenter.cuny.edu}\\%
+\author{Hannah Aizenman \thanks{e-mail: haizenman@gradcenter.cuny.edu}\\%
         \scriptsize Computer Science, The Graduate Center, CUNY % 
 \and Elliott Sales de Andrade \thanks{e-mail: quantum.analyst@gmail.com}\\%
         \scriptsize Matplotlib %
@@ -179,7 +179,7 @@ paths (arbitrary shapes)~\cite{MarkerReferenceMatplotlib}.
 10 hatch patterns that, as shown in \autoref{fig:hatch_patterns}, can be scaled and composed.
 \end{description}
 
-As shown in \autoref{fig:hatch_patterns}, markers, lines, and hatches can all be customized using color. Path effects~\cite{PathEffectsGuide} can be used to adjust the style of how lines, texts, and patches (shapes) are drawn. This can include adding effects such as shadows, outlines, strokes with a "hand drawn" aesthetic, and barbs as in \autoref{fig:hatch_patterns}. Additionally, Matplotlib supports generating custom fill patterns, as exemplified by third party libraries such as \cite{leeMpl_pe_pattern_monster011Documentation}. 
+As shown in \autoref{fig:hatch_patterns}, markers, lines, and hatches can all be customized using color. Path effects~\cite{PathEffectsGuide} can be used to adjust the style of how lines, texts, and patches (shapes) are drawn. This can include adding effects such as shadows, outlines, strokes with a ``hand drawn" aesthetic, and barbs as in \autoref{fig:hatch_patterns}. Additionally, Matplotlib supports generating custom fill patterns, as exemplified by third party libraries such as \cite{leeMpl_pe_pattern_monster011Documentation}. 
 
 \section{Text}
 As with color and texture, Matplotlib's fonts allow a very high level of customization so that users can choose the fonts, styles, weights, sizes, and colors best suited for their audience~\cite{FontsMatplotlibMatplotlib}. The default font \texttt{DejaVu Sans}~\cite{DejaVuFonts} provides characters that are sans serif, unembellished, and distinguishable but does not guarantee consistent stroke width or symbol spacing. 
@@ -199,7 +199,7 @@ In addition, Matplotlib also has a robust API for formatting ticks~\cite{Matplot
 
 
 \section{Alt text \& WAI-ARIA}
-Alt text is a textual description of the visualization and WAI-ARIA is a framework for describing web content and applications\cite{initiativewaiWAIARIAOverview}; in Matplotlib, alt-text and ARIA support is backend dependent because screen readers interact with output, such as image files and application windows, and not Matplotlib internals. Backends are the software that manages the rendering of visual elements and handling of events~\cite{BackendsMatplotlib3110}, e.g., the artist defines the aesthetic properties and behavior of a line and the backend draws it to screen or file. Broadly, backends include static rendering engines such as Agg, Cairo, and PDF, interactive GUI frameworks such as Qt, and GTK, and HTML/JavaScript widget frameworks such as ipympl. This separation of concerns at the architecture layer makes it technically feasible to develop accessibility API drawing from the Artist and customized to each backend; but, efforts such as adding a wai-aria property~\cite{ImproveAccessibilityFigures,AddWaiariaProperty} stall out for many years because the developers do not know what information about the artist should be encoded and therefore which architecture and implementation decisions to move forward with.
+Alt text is a textual description of the visualization and WAI-ARIA is a framework for describing web content and applications\cite{WebAIMIntroductionARIA}; in Matplotlib, alt-text and ARIA support is backend dependent because screen readers interact with output, such as image files and application windows, and not Matplotlib internals. Backends are the software that manages the rendering of visual elements and handling of events~\cite{BackendsMatplotlib3110}, e.g., the artist defines the aesthetic properties and behavior of a line and the backend draws it to screen or file. Broadly, backends include static rendering engines such as Agg, Cairo, and PDF, interactive GUI frameworks such as Qt, and GTK, and HTML/JavaScript widget frameworks such as ipympl. This separation of concerns at the architecture layer makes it technically feasible to develop accessibility API drawing from the Artist and customized to each backend; but, efforts such as adding a wai-aria property~\cite{ImproveAccessibilityFigures,AddWaiariaProperty} stall out for many years because the developers do not know what information about the artist should be encoded and therefore which architecture and implementation decisions to move forward with.
 
 \subsection{Static Backends}
 
@@ -218,7 +218,7 @@ A secondary goal of the data container work is reworking the visual encoding and
 
 
 \section{Conclusion}
-Matplotlib's option driven design provides accessible defaults and many ways to customize the graphic to make the various elements more accessible. There are architectural challenges that make it difficult to make interactive visualizations more accessible, but the artist tree stores information that could potentially be exposed to accessibility tools, for example to populate alt-text and compensate for the inability to introspect GUI elements. In keeping with options driven ethos, it would be inappropriate for Matplotlib to provide AI generated content as that would limit the downstream developers options; Instead, Matplotlib maintainers (and contributors) can implement an interface for downstream developers and welcome collaboration on developing a useful interface and addressing other accessibility concerns. 
+Matplotlib's option driven design provides accessible defaults and many ways to customize the graphic to make the various elements more accessible. There are architectural challenges that make it difficult to make interactive visualizations more accessible, but the artist tree stores information that could potentially be exposed to accessibility tools, for example to populate alt-text and compensate for the inability to introspect GUI elements. In keeping with options driven ethos, it would be inappropriate for Matplotlib to provide AI generated content as that would limit the downstream developers options; instead, Matplotlib maintainers (and contributors) can implement an interface for downstream developers and welcome collaboration on developing a useful interface and addressing other accessibility concerns. 
 
 
 
